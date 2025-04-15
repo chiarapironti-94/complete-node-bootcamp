@@ -1,6 +1,4 @@
-// index.ts
-const greet = (name: string) => {
-  return `Hello, ${name}`;
-};
+import Server from './Server/Server';
 
-console.log(greet('World'));
+const application = new Server();
+application.listen(8000);
