@@ -4,9 +4,6 @@ node_modules/
 # Build output
 dist/
 
-# Dependency lock file (optional, depending on team policy)
-package-lock.json
-
 # TypeScript cache
 *.tsbuildinfo
 

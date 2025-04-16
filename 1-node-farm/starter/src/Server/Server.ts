@@ -1,4 +1,4 @@
-import * as http from "http";
+import * as http from 'http';
 import { serveHtml } from '../Utils/Functions';
 import { StaticFiles } from '../Utils/Types';
 
