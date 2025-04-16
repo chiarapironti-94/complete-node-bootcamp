@@ -9,3 +9,8 @@ export type Product = {
   organic: boolean;
   description: string;
 };
+
+export interface StaticFiles {
+  data: Product[];
+  css: string;
+};
