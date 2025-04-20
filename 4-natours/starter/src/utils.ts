@@ -1,0 +1,26 @@
+import * as path from 'path';
+
+export const SERVER_PORT = 3000;
+export const TOURS_SIMPLE_PATH = path.resolve(
+  __dirname,
+  '..',
+  'dev-data',
+  'data',
+  'tours-simple.json'
+);
+
+export interface Tour {
+  id: number;
+  name: string;
+  duration: number;
+  maxGroupSize: number;
+  difficulty: 'easy' | 'medium' | 'difficult'; // or just string if you prefer flexibility
+  ratingsAverage: number;
+  ratingsQuantity: number;
+  price: number;
+  summary: string;
+  description: string;
+  imageCover: string;
+  images: string[];
+  startDates: string[]; // consider converting to Date[] if you're parsing them
+}
