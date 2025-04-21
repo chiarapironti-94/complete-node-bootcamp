@@ -1,17 +1,12 @@
-import * as fs from 'fs';
 import express from 'express';
-import { TOURS_SIMPLE_PATH, SERVER_PORT, Tour } from './utils';
-
-const tours: Tour[] = JSON.parse(fs.readFileSync(TOURS_SIMPLE_PATH, 'utf-8'));
+import { SERVER_PORT } from './utils';
+import tourRouter from './routes/tourRoutes';
 
 const app = express();
+app.use(express.json()).use('/api/v1/tours', tourRouter);
 
 app.get('/', (_, response) => {
   response.status(200).send('Hello from the server!');
-});
-
-app.get('/api/v1/tours', (_, response) => {
-  response.status(200).send(tours);
 });
 
 app.listen(SERVER_PORT, () => {

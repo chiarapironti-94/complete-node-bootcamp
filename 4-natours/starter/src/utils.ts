@@ -1,7 +1,8 @@
 import * as path from 'path';
+import * as fs from 'fs';
 
 export const SERVER_PORT = 3000;
-export const TOURS_SIMPLE_PATH = path.resolve(
+const TOURS_SIMPLE_PATH = path.resolve(
   __dirname,
   '..',
   'dev-data',
@@ -24,3 +25,7 @@ export interface Tour {
   images: string[];
   startDates: string[]; // consider converting to Date[] if you're parsing them
 }
+
+export const tours: Tour[] = JSON.parse(
+  fs.readFileSync(TOURS_SIMPLE_PATH, 'utf-8')
+);
