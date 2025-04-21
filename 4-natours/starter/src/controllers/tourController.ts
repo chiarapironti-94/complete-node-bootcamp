@@ -1,36 +1,36 @@
-import { Request, Response } from 'express';
-import { tours } from '../utils';
+import { Request, Response } from 'express'
+import { tours } from '../utils'
 
-export const getAllTours = (_: Request, response: Response) => {
-  response.status(200).json({
+export const getAllTours = (_: Request, res: Response) => {
+  res.status(200).json({
     status: 'success',
     results: tours.length,
     tours,
-  });
-};
+  })
+}
 
-export const postTour = (request: Request, response: Response) => {
-  console.log(request.body);
-  response.status(201).json({
+export const postTour = (req: Request, res: Response) => {
+  console.log(req.body)
+  res.status(201).json({
     status: 'success',
-  });
-};
+  })
+}
 
-export const getTourById = (request: Request, response: Response) => {
-  console.log(request.params);
-  response.status(200).json({
+export const getTourById = (req: Request, res: Response) => {
+  console.log(req.params)
+  res.status(200).json({
     status: 'success',
-  });
-};
+  })
+}
 
-export const patchTourById = (request: Request, response: Response) => {
-  console.log(request.body);
-  response.status(201).json({
+export const patchTourById = (req: Request, res: Response) => {
+  console.log(req.body)
+  res.status(201).json({
     status: 'success',
-  });
-};
-export const deleteTourById = (_: Request, response: Response) => {
-  response.status(204).json({
+  })
+}
+export const deleteTourById = (_: Request, res: Response) => {
+  res.status(204).json({
     status: 'success',
-  });
-};
+  })
+}

@@ -1,14 +1,24 @@
 import express from 'express';
-import { SERVER_PORT } from './utils';
+import morgan from 'morgan';
 import tourRouter from './routes/tourRoutes';
+import userRouter from './routes/userRoutes';
 
 const app = express();
-app.use(express.json()).use('/api/v1/tours', tourRouter);
+app
+  .use(morgan('dev'))
+  .use(express.json())
+  .use('/api/v1/tours', tourRouter)
+  .use('/api/v1/users', userRouter);
 
 app.get('/', (_, response) => {
-  response.status(200).send('Hello from the server!');
+  response.status(200).json('Hello from the server!');
 });
 
-app.listen(SERVER_PORT, () => {
-  console.log(`Server listening on port ${SERVER_PORT}...`);
+app.all('*', (req, res) => {
+  res.status(404).json({
+    status: 'fail',
+    message: `Can't find ${req.originalUrl} on this server!`,
+  });
 });
+
+export default app;
