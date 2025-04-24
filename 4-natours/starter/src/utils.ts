@@ -10,6 +10,8 @@ const TOURS_SIMPLE_PATH = path.resolve(
   'tours-simple.json'
 );
 
+export const PUBLIC_FOLDER_PATH = path.resolve(__dirname, '..', 'public');
+
 export interface Tour {
   id: number;
   name: string;
