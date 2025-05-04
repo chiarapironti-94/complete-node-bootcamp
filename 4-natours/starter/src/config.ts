@@ -1,3 +1,7 @@
+import * as path from 'path';
 import dotenv from 'dotenv';
 
-dotenv.config({ path: './config.env' });
+const configEnvPath = path.resolve(__dirname, '../config.env');
+console.log('configEnvPath is ', configEnvPath);
+
+dotenv.config({ path: configEnvPath });

@@ -2,8 +2,13 @@ import { Request, Response } from 'express';
 import Tour from '../database/models/tourModel';
 
 export const getAllTours = async (req: Request, res: Response) => {
+  const filters = { ...req.query };
+  const excludedFields = ['page', 'sort', 'limit', 'field'];
+
+  excludedFields.forEach((el) => delete filters[el]);
   try {
-    const tours = await Tour.find();
+    const query = Tour.find(filters);
+    const tours = await query;
 
     res.status(200).json({
       status: 'success',
