@@ -1,13 +1,10 @@
 import { Request, Response } from 'express';
+import { buildQueryFeatures } from '../utils';
 import Tour from '../database/models/tourModel';
 
 export const getAllTours = async (req: Request, res: Response) => {
-  const filters = { ...req.query };
-  const excludedFields = ['page', 'sort', 'limit', 'field'];
-
-  excludedFields.forEach((el) => delete filters[el]);
   try {
-    const query = Tour.find(filters);
+    const query = buildQueryFeatures(Tour, req.query);
     const tours = await query;
 
     res.status(200).json({
