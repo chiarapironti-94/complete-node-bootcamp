@@ -33,23 +33,15 @@ export const tours: Tour[] = JSON.parse(
   fs.readFileSync(TOURS_SIMPLE_PATH, 'utf-8')
 );
 
-export const transformOperators = (
-  queryObj: Record<string, any>
-): Record<string, any> => {
-  const queryStr = JSON.stringify(queryObj);
-
-  const transformedStr = queryStr.replace(
-    /\b(gte|gt|lte|lt)\b/g,
-    (match) => `$${match}`
-  );
-
-  return JSON.parse(transformedStr);
-};
-
-export const buildQueryFeatures = <T extends Document>(
-  Model: Model<T>,
-  queryObj: Record<string, any>
-): Query<EnforceDocument<T, {}>[], EnforceDocument<T, {}>> => {
+export const buildQueryFeatures = async <T extends Document>(
+  model: Model<T>,
+  queryObj: Record<string, unknown>
+): Promise<
+  Query<
+    EnforceDocument<T, Record<string, unknown>>[],
+    EnforceDocument<T, Record<string, unknown>>
+  >
+> => {
   // 1️⃣ Clone query object and remove special fields (like sort)
   const queryObjCopy = { ...queryObj };
   const excludedFields = ['sort', 'fields', 'page', 'limit'];
@@ -61,7 +53,7 @@ export const buildQueryFeatures = <T extends Document>(
   const filterObj = JSON.parse(queryStr);
 
   // 3️⃣ Build the Mongoose query
-  let query = Model.find(filterObj);
+  let query = model.find(filterObj);
 
   // 4️⃣ Apply sorting if specified
   if (queryObj.sort) {
@@ -70,6 +62,24 @@ export const buildQueryFeatures = <T extends Document>(
   } else {
     query = query.sort('-createdAt'); // Default sort
   }
+
+  // 5️⃣ Only select certain fields if specified
+  if (queryObj.fields) {
+    const fields = (queryObj.fields as string).split(',').join(' ');
+    query = query.select(fields);
+  } else {
+    query = query.select('-__v');
+  }
+
+  // 6️⃣ Page and limit
+  const page = Number(queryObj.page) || 1;
+  const limit = Number(queryObj.limit) || 100;
+  const skip = (page - 1) * limit;
+
+  const docNumber = await model.countDocuments();
+  if (skip >= docNumber) throw new Error('This page does not exist');
+
+  query = query.skip(skip).limit(limit);
 
   return query;
 };
