@@ -1,11 +1,25 @@
-import { Request, Response } from 'express';
-import { buildQueryFeatures } from '../utils';
+import { NextFunction, Request, Response } from 'express';
+import APIFeatures from '../utils/APIFeatures';
 import Tour from '../database/models/tourModel';
+
+export const t5cMiddleware = (
+  req: Request,
+  _: Response,
+  next: NextFunction
+) => {
+  req.query.limit = '5';
+  req.query.sort = '-ratingsAverage, price';
+  req.query.fields = 'name, price, ratingsAverage, summary, difficulty';
+
+  next();
+};
 
 export const getAllTours = async (req: Request, res: Response) => {
   try {
-    const query = buildQueryFeatures(Tour, req.query);
-    const tours = await query;
+    const features = new APIFeatures(Tour.find(), req.query);
+    await features.filter().sort().limitFields().paginate();
+    // const query = buildQueryFeatures(Tour, req.query);
+    const tours = await features.getQuery();
 
     res.status(200).json({
       status: 'success',

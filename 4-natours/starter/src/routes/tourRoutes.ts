@@ -5,9 +5,12 @@ import {
   getTourById,
   patchTourById,
   deleteTourById,
+  t5cMiddleware,
 } from '../controllers/tourController';
 
 const router = express.Router();
+
+router.route('/top-5-cheap').get(t5cMiddleware, getAllTours);
 
 router.route('/').get(getAllTours).post(postTour);
 
