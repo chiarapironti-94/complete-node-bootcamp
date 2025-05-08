@@ -2,7 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import tourRouter from './routes/tourRoutes';
 import userRouter from './routes/userRoutes';
-import { PUBLIC_FOLDER_PATH } from './utils';
+import { PUBLIC_FOLDER_PATH } from './utils/utils';
 
 const app = express();
 if (process.env.NODE_ENV === 'development') {
