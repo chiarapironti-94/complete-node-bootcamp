@@ -17,6 +17,7 @@ interface ITour {
   images: string[];
   createdAt: Date;
   startDates: Date[];
+  secretTour: boolean;
 }
 
 type TourDocument = ITour & Document;
@@ -82,6 +83,11 @@ const tourSchema = new mongoose.Schema<TourDocument>(
       select: false,
     },
     startDates: [Date], // array of dates
+    secretTour: {
+      type: Boolean,
+      default: false,
+      select: false,
+    },
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
@@ -98,6 +104,21 @@ tourSchema.pre('save', function (next) {
 tourSchema.post('save', function (doc, next) {
   next();
 });
+
+tourSchema.pre(
+  /^find/,
+  function (
+    this: mongoose.Query<TourDocument[], TourDocument>,
+    next: mongoose.HookNextFunction
+  ) {
+    this.find({ secretTour: { $ne: true } });
+    next();
+  }
+);
+
+// tourSchema.post(/^find/, function (docs, next) {
+//   next();
+// });
 
 const Tour = mongoose.model<TourDocument>('Tour', tourSchema);
 
